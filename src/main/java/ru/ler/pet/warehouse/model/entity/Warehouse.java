@@ -1,28 +1,26 @@
-package ru.ler.pet.warehouse.model;
+package ru.ler.pet.warehouse.model.entity;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-/**
- * Created by 16984608 on 24.07.2019.
- */
 @Data
 @NoArgsConstructor
 @Entity
 public class Warehouse {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_WAREHOUSE")
-    private Long warehouseID;
+    private Long id;
     @Column
-    @Getter
     private String name;
 
-    public Warehouse(String name) {
+    private Warehouse(String name) {
         this.name = name;
+    }
+
+    public static Warehouse ofName(String name){
+        return new Warehouse(name);
     }
 }
 

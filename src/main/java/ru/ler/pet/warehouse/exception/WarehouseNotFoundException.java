@@ -1,4 +1,4 @@
-package ru.ler.pet.warehouse.controller;
+package ru.ler.pet.warehouse.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

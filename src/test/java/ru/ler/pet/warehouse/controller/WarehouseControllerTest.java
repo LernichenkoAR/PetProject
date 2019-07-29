@@ -1,67 +1,70 @@
 package ru.ler.pet.warehouse.controller;
 
-
-import org.junit.Assert;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-import ru.ler.pet.warehouse.model.Warehouse;
-import ru.ler.pet.warehouse.model.WarehouseDTO;
-import ru.ler.pet.warehouse.service.WarehouseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import ru.ler.pet.warehouse.model.domen.WarehouseDTO;
+import ru.ler.pet.warehouse.model.entity.Warehouse;
+import ru.ler.pet.warehouse.service.WarehouseService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-/**
- * Created by 16984608 on 24.07.2019.
- */
-@ExtendWith(MockitoExtension.class)
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(controllers = WarehouseController.class)
 public class WarehouseControllerTest {
 
+    @Autowired
+    private WarehouseController controller;
 
-    @Mock
-    private WarehouseRepository warehouseRepository;
-    @InjectMocks
-    private WarehouseController warehouseController;
-
-
-    private static List<Warehouse> l = new ArrayList<>();
+    @Autowired
+    private MockMvc mockMvc;
+    private  static List<WarehouseDTO> l = new ArrayList<>();
 
     @BeforeAll
     public static void init() {
-        l.add(new Warehouse("O'Niel WH"));
-        l.add(new Warehouse("Central WH"));
-        l.add(new Warehouse("Fruit WH"));
-        l.add(new Warehouse("Drone WH"));
-        l.add(new Warehouse("Goods WH"));
-
+//        l.add(WarehouseDTO.ofName("O'Niel WH"));
+//        l.add(WarehouseDTO.ofName("Central WH"));
+//        l.add(WarehouseDTO.ofName("Fruit WH"));
+//        l.add(WarehouseDTO.ofName("Drone WH"));
+//        l.add(WarehouseDTO.ofName("Goods WH"));
     }
 
     @Test
-    public void getAllTest() {
-        Mockito.when(warehouseRepository.findAll()).thenReturn(l);
-        List<WarehouseDTO> result = warehouseController.getAll();
-        Assert.assertNotNull(result);
-        Assert.assertEquals(result.size(), 5);
+    public void contextLoads() throws Exception{
+        Assertions.assertThat(controller).isNotNull();
+    }
+
+    @MockBean
+    private WarehouseService warehouseService;
+
+    @Test
+    public void getAllWarehousesReturnSuccess() throws Exception {
+        this.mockMvc.perform(get("/api/v1/warehouses")).andDo(print()).andExpect(status().isOk());
     }
     @Test
-    public void getByIdTest(){
-        Mockito.when(warehouseRepository.findById(Mockito.anyLong())).thenAnswer((Answer<Optional<Warehouse>>)
-                invocation -> {
-            Long arg = invocation.getArgument(0);
-            Integer index = arg.intValue();
-            return  Optional.of(l.get(index));
-        });
-
-        WarehouseDTO result = warehouseController.getWarehouseByID(1L);
-        Assert.assertNotNull(result);
-        Assert.assertEquals(result.getName(), "Central WH");
+    public void getAllWarehousesReturnAll() throws Exception {
+        Mockito.when(warehouseService.getAll()).thenReturn(l);
+        this.mockMvc.perform(get("/api/v1/warehouses"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("[]")));
     }
 
 }

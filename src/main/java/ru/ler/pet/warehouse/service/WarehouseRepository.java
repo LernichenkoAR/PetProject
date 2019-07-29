@@ -1,7 +1,7 @@
 package ru.ler.pet.warehouse.service;
 
 import org.springframework.data.repository.CrudRepository;
-import ru.ler.pet.warehouse.model.Warehouse;
+import ru.ler.pet.warehouse.model.entity.Warehouse;
 
 import java.util.List;
 import java.util.Optional;
