@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ler.pet.warehouse.model.domen.WarehouseDTO;
-import ru.ler.pet.warehouse.service.WarehouseService;
+import ru.ler.pet.warehouse.service.WarehouseServiceImpl;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class WarehouseController {
 
-    private final WarehouseService service;
+    private final WarehouseServiceImpl service;
 
     @GetMapping("/warehouses")
     public List<WarehouseDTO> getAll() {

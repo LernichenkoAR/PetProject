@@ -8,9 +8,10 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
+@Table(name = "warehouse")
 public class Warehouse {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String name;
@@ -19,7 +20,7 @@ public class Warehouse {
         this.name = name;
     }
 
-    public static Warehouse ofName(String name){
+    public static Warehouse ofName(String name) {
         return new Warehouse(name);
     }
 }
