@@ -13,9 +13,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
+class WarehouseController {
 
-public class WarehouseController {
-
+    @SuppressWarnings("unused")
     private final WarehouseServiceImpl service;
 
     @GetMapping("/warehouses")
@@ -24,8 +24,7 @@ public class WarehouseController {
     }
 
     @GetMapping("/warehouses/{warehouse_id}")
-    public WarehouseDTO getWarehouseByID(@PathVariable("warehouse_id") Long id) {
-        return service.getWarehouseByID(id);
-
+    public WarehouseDTO getWarehouseByID(@PathVariable("warehouse_id") Long warehouse_id) {
+        return service.getWarehouseByID(warehouse_id);
     }
 }

@@ -17,18 +17,16 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class WarehouseServiceImplTest {
+class WarehouseServiceImplTest {
 
+    private static final List<Warehouse> l = new ArrayList<>();
     @Mock
     private WarehouseRepository warehouseRepository;
     @InjectMocks
     private WarehouseServiceImpl warehouseServiceImpl;
 
-
-    private static List<Warehouse> l = new ArrayList<>();
-
     @BeforeAll
-    public static void init() {
+    static void init() {
         l.add(Warehouse.ofName("O'Niel WH"));
         l.add(Warehouse.ofName("Central WH"));
         l.add(Warehouse.ofName("Fruit WH"));
@@ -38,7 +36,7 @@ public class WarehouseServiceImplTest {
     }
 
     @Test
-    public void getAllTest() {
+    void getAllTest() {
         Mockito.when(warehouseRepository.findAll()).thenReturn(l);
         List<WarehouseDTO> result = warehouseServiceImpl.getAll();
         Assert.assertNotNull(result);
@@ -46,11 +44,11 @@ public class WarehouseServiceImplTest {
     }
 
     @Test
-    public void getByIdTest() {
+    void getByIdTest() {
         Mockito.when(warehouseRepository.findById(Mockito.anyLong())).thenAnswer((Answer<Optional<Warehouse>>)
                 invocation -> {
                     Long arg = invocation.getArgument(0);
-                    Integer index = arg.intValue();
+                    int index = arg.intValue();
                     return Optional.of(l.get(index));
                 });
 

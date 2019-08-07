@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@SuppressWarnings({"CanBeFinal", "unused"})
 @Data
 @NoArgsConstructor
 @Entity
@@ -13,6 +14,7 @@ public class Warehouse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @SuppressWarnings("CanBeFinal")
     @Column
     private String name;
 

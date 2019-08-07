@@ -11,8 +11,6 @@ import java.util.Optional;
  */
 public interface WarehouseRepository extends CrudRepository<Warehouse, Long> {
 
-    List<Warehouse> findByName(String Name);
-
     List<Warehouse> findAll();
 
     Optional<Warehouse> findById(Long id);

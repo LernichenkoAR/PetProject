@@ -1,14 +1,18 @@
 package ru.ler.pet.warehouse.model.domen;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 
+@SuppressWarnings("unused")
 @RequiredArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Data
 public class WarehouseDTO {
-    private final Long warehouseID;
-    private final String name;
+    private Long warehouseID;
+    private String name;
 
 
     public static WarehouseDTO ofName(String name) {

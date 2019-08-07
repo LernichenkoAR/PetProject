@@ -2,6 +2,7 @@ package ru.ler.pet.warehouse.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.ler.pet.warehouse.exception.BadRequestException;
 import ru.ler.pet.warehouse.exception.WarehouseNotFoundException;
 import ru.ler.pet.warehouse.model.domen.WarehouseDTO;
 import ru.ler.pet.warehouse.model.domen.WarehouseDTOFactory;
@@ -23,6 +24,11 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     public WarehouseDTO getWarehouseByID(Long id) {
-        return WarehouseDTOFactory.from(repository.findById(id).orElseThrow(WarehouseNotFoundException::new));
+        if (id > 0) {
+            return WarehouseDTOFactory.from(repository.findById(id).orElseThrow(WarehouseNotFoundException::new));
+        } else {
+            throw new BadRequestException();
+        }
+
     }
 }

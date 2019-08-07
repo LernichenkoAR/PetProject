@@ -1,39 +1,31 @@
 databaseChangeLog:
 
   - changeSet:
-      id: 1
+      id: 1565204120
       author: ler
       changes:
         - sql: CREATE SCHEMA warehouse;
       rollback:
         - sql: DROP SCHEMA warehouse;
+
   - changeSet:
-      id: 2
+      id: 1565204293
       author: ler
       changes:
-        - createSequense:
+        - createTable:
             schemaName: warehouse
-            sequenceName: warehouse_id_seq
+            tableName: warehouse
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+              - column:
+                  name: name
+                  type: varchar(50)
       rollback:
-        - sql: DROP SEQUENCE warehouse_id_seq;
-  - changeSet:
-        id: 3
-        author: ler
-        changes:
-          - createTable:
-              schemaName: warehouse
-              tableName: warehouse
-              columns:
-                - column:
-                    name: id
-                    type: int
-#                    autoIncrement: true
-                - column:
-                    name: name
-                    type: varchar(50)
-        rollback:
-          - dropTable:
-              tableName: warehouse
+        - dropTable:
+            tableName: warehouse
 
 
 
