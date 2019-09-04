@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @SuppressWarnings({"CanBeFinal", "unused"})
 @Data
@@ -17,6 +18,10 @@ public class Warehouse {
     @SuppressWarnings("CanBeFinal")
     @Column
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "warehouse")
+    private List<Product> products;
+
 
     private Warehouse(String name) {
         this.name = name;
