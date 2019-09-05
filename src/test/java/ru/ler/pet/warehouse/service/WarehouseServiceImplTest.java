@@ -52,7 +52,12 @@ class WarehouseServiceImplTest {
                     return Optional.of(l.get(index));
                 });
 
-        WarehouseDTO result = warehouseServiceImpl.getWarehouseByID(1L);
+        WarehouseDTO result = null;
+        try {
+            result = warehouseServiceImpl.getWarehouseByID(1L);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         Assert.assertNotNull(result);
         Assert.assertEquals(result.getName(), "Central WH");
     }

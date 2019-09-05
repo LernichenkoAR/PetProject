@@ -24,7 +24,7 @@ class WarehouseController {
     }
 
     @GetMapping("/warehouses/{warehouse_id}")
-    public WarehouseDTO getWarehouseByID(@PathVariable("warehouse_id") Long warehouse_id) {
+    public WarehouseDTO getWarehouseByID(@PathVariable("warehouse_id") Long warehouse_id) throws Throwable {
         return service.getWarehouseByID(warehouse_id);
     }
 }

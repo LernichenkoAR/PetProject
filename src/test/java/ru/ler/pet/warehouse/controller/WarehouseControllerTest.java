@@ -13,7 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.ler.pet.warehouse.exception.BadRequestException;
-import ru.ler.pet.warehouse.exception.WarehouseNotFoundException;
+import ru.ler.pet.warehouse.exception.EntityNotFoundException;
 import ru.ler.pet.warehouse.model.domen.WarehouseDTO;
 import ru.ler.pet.warehouse.service.WarehouseServiceImpl;
 
@@ -85,14 +85,14 @@ class WarehouseControllerTest {
 
 
     @Test
-    void getWarehouseByIdSuccess() throws Exception {
+    void getWarehouseByIdSuccess() throws Throwable {
         Mockito.when(warehouseServiceImpl.getWarehouseByID(Mockito.anyLong())).then(invocationOnMock -> {
             Long lo = invocationOnMock.getArgument(0);
             if (lo < 0) {
                 throw new BadRequestException();
             }
             if (lo >= l.size()) {
-                throw new WarehouseNotFoundException();
+                throw new EntityNotFoundException();
             }
             return l.get(lo.intValue());
         });
@@ -107,14 +107,14 @@ class WarehouseControllerTest {
 
 
     @Test
-    void getWarehouseByIdNotFound() throws Exception {
+    void getWarehouseByIdNotFound() throws Throwable {
         Mockito.when(warehouseServiceImpl.getWarehouseByID(Mockito.anyLong())).then(invocationOnMock -> {
             Long lo = invocationOnMock.getArgument(0);
             if (lo < 0) {
                 throw new BadRequestException();
             }
             if (lo >= l.size()) {
-                throw new WarehouseNotFoundException();
+                throw new EntityNotFoundException();
             }
             return l.get(lo.intValue());
         });
@@ -123,7 +123,7 @@ class WarehouseControllerTest {
     }
 
     @Test
-    void getWarehouseByIdBadRequest() throws Exception {
+    void getWarehouseByIdBadRequest() throws Throwable {
         Mockito.when(warehouseServiceImpl.getWarehouseByID(Mockito.anyLong())).then(invocationOnMock -> {
             Long lo = invocationOnMock.getArgument(0);
             if (lo >= l.size()) {

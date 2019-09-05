@@ -14,12 +14,18 @@ import java.util.List;
 public class Warehouse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "warehouse_id")
     private Long id;
     @SuppressWarnings("CanBeFinal")
     @Column
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "warehouse")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "warehouse")
+    @JoinTable(
+            name = "Warehouse_Product",
+            joinColumns = { @JoinColumn(name = "warehouse_id") },
+            inverseJoinColumns = { @JoinColumn(name = "product_id") }
+    )
     private List<Product> products;
 
 
