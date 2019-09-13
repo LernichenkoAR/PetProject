@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.ler.pet.warehouse.exception.BadRequestException;
 import ru.ler.pet.warehouse.exception.EntityNotFoundException;
+import ru.ler.pet.warehouse.model.domen.ItemDTO;
 import ru.ler.pet.warehouse.model.domen.WarehouseDTO;
 import ru.ler.pet.warehouse.service.WarehouseServiceImpl;
 
@@ -22,7 +23,9 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -86,7 +89,7 @@ class WarehouseControllerTest {
 
     @Test
     void getWarehouseByIdSuccess() throws Throwable {
-        Mockito.when(warehouseServiceImpl.getWarehouseByID(Mockito.anyLong())).then(invocationOnMock -> {
+        Mockito.when(warehouseServiceImpl.getByID(Mockito.anyLong())).then(invocationOnMock -> {
             Long lo = invocationOnMock.getArgument(0);
             if (lo < 0) {
                 throw new BadRequestException();
@@ -108,7 +111,7 @@ class WarehouseControllerTest {
 
     @Test
     void getWarehouseByIdNotFound() throws Throwable {
-        Mockito.when(warehouseServiceImpl.getWarehouseByID(Mockito.anyLong())).then(invocationOnMock -> {
+        Mockito.when(warehouseServiceImpl.getByID(Mockito.anyLong())).then(invocationOnMock -> {
             Long lo = invocationOnMock.getArgument(0);
             if (lo < 0) {
                 throw new BadRequestException();
@@ -122,16 +125,44 @@ class WarehouseControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    //    @Test
+//    void getWarehouseByIdBadRequest() throws Throwable {
+//        Mockito.when(warehouseServiceImpl.getByID(Mockito.anyLong())).then(invocationOnMock -> {
+//            Long lo = invocationOnMock.getArgument(0);
+//            if (lo > -1 && lo < l.size() ){
+//                return l.get(lo.intValue());
+//            }
+//            if (lo >= l.size()) {
+//                return new EntityNotFoundException();
+//            }
+//            return new BadRequestException();
+//        });
+//        this.mockMvc.perform(get("/api/v1/warehouses/-1"))
+//                .andExpect(status().isBadRequest());
+//    }
     @Test
-    void getWarehouseByIdBadRequest() throws Throwable {
-        Mockito.when(warehouseServiceImpl.getWarehouseByID(Mockito.anyLong())).then(invocationOnMock -> {
-            Long lo = invocationOnMock.getArgument(0);
-            if (lo >= l.size()) {
-                return null;
-            }
-            return l.get(lo.intValue());
-        });
-        this.mockMvc.perform(get("/api/v1/warehouses/-1"))
-                .andExpect(status().isBadRequest());
+    void createNew() throws Exception {
+        ObjectMapper om = new ObjectMapper();
+        WarehouseDTO warehouseDTO = WarehouseDTO.ofName("Central");
+        String wh = om.writeValueAsString(warehouseDTO);
+        this.mockMvc.perform(post("/api/v1/warehouses")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(wh))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void addNewItems() throws Exception {
+        ObjectMapper om = new ObjectMapper();
+        ItemDTO itemDTO = ItemDTO.newInstance(0L, 0L, 0L);
+        List<ItemDTO> items = new ArrayList<>();
+        items.add(itemDTO);
+        items.add(itemDTO);
+        items.add(itemDTO);
+        String is = om.writeValueAsString(items);
+        this.mockMvc.perform(post("/api/v1/warehouses/1/items")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(is))
+                .andExpect(status().isOk());
     }
 }

@@ -21,6 +21,7 @@ public class ProductController {
     public List<ProductDTO> getAll() {
         return service.getAll();
     }
+
     @GetMapping("/products/{product_id}")
     public ProductDTO getById(@PathVariable("product_id") Long id) throws Throwable {
         return service.getById(id);

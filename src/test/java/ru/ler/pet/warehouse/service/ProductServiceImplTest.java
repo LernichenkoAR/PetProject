@@ -15,28 +15,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ProductServiceImplTest {
 
+    private static List<Product> resQuery;
     @Mock
     private ProductRepository repository;
     @InjectMocks
     private ProductServiceImpl service;
 
-    private List<Product> resQuery;
     @BeforeAll
-    public void init() {
+    public static void init() {
         resQuery = new ArrayList<>();
-        resQuery.add(Product.newInstanse("Barney Bears", 3));
-        resQuery.add(Product.newInstanse("Peanut Butter", 1));
+        resQuery.add(Product.newInstance(0L, "Barney Bears", 3));
+        resQuery.add(Product.newInstance(0L, "Peanut Butter", 1));
     }
 
     @Test
     void getAll() {
         Mockito.when(repository.findAll()).thenReturn(resQuery);
         Assertions.assertNotNull(service.getAll());
-        Assertions.assertEquals(service.getAll().size(),2);
+        Assertions.assertEquals(service.getAll().size(), 2);
     }
 
     @Test

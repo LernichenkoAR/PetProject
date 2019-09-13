@@ -5,18 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-
-@SuppressWarnings("unused")
 @RequiredArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Data
-public class WarehouseDTO {
+public class ItemDTO {
+
     private Long id;
-    private String name;
+    private Long product;
+    private Long warehouse;
 
-
-    public static WarehouseDTO ofName(String name) {
-        return new WarehouseDTO(0L, name);
-
+    public static ItemDTO newInstance(Long id, Long product, Long warehouse) {
+        return new ItemDTO(id, product, warehouse);
     }
 }

@@ -14,7 +14,11 @@ public class ProductDTO {
     private String name;
     private Integer volume;
 
-    static ProductDTO newInstance(String name, Integer volume){
+    public static ProductDTO newInstance(Long id, String name, Integer volume) {
+        return new ProductDTO(id, name, volume);
+    }
+
+    public static ProductDTO ofNameAndVolume(String name, Integer volume) {
         return new ProductDTO(0L, name, volume);
     }
 }

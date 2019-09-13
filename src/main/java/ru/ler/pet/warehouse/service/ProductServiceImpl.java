@@ -2,9 +2,10 @@ package ru.ler.pet.warehouse.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.ler.pet.warehouse.exception.BadRequestException;
 import ru.ler.pet.warehouse.exception.EntityNotFoundException;
 import ru.ler.pet.warehouse.model.domen.ProductDTO;
-import ru.ler.pet.warehouse.model.domen.ProductDTOFactory;
+import ru.ler.pet.warehouse.model.domen.ProductMapper;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -19,13 +20,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> getAll() {
         return repository.findAll().stream()
-                .map(ProductDTOFactory::from)
+                .map(ProductMapper::from)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ProductDTO getById(Long id) throws Throwable {
-        return ProductDTOFactory.from(repository.findById(id)
-                .orElseThrow((Supplier<Throwable>) () -> new EntityNotFoundException("Can not find Product")));
+    public ProductDTO getById(Long id) {
+        if (id < 0) {
+            throw new BadRequestException();
+        }
+        return ProductMapper.from(repository.findById(id)
+                .orElseThrow((Supplier<RuntimeException>) () -> new EntityNotFoundException("Can not find Product")));
     }
 }

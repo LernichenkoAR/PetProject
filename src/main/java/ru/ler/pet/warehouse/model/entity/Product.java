@@ -4,12 +4,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+
 
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="products")
+@Table(name = "products")
 
 public class Product {
     @Id
@@ -20,8 +20,8 @@ public class Product {
     private String name;
     @Column
     private Integer volume;
-    @ManyToMany(mappedBy = "products")
-    private List<Warehouse> warehouses;
+//    @ManyToMany(mappedBy = "products")
+//    private List<Warehouse> warehouses;
 
     private Product(Long id, String name, Integer volume) {
         this.id = id;
@@ -29,7 +29,21 @@ public class Product {
         this.volume = volume;
     }
 
-    public static Product newInstanse(String name, Integer volume){
+    public static Product newInstance(Long id, String name, Integer volume) {
+        return new Product(id, name, volume);
+    }
+
+    public static Product ofNameAndVolume(String name, Integer volume) {
         return new Product(0L, name, volume);
     }
+
+    @Override
+    public String toString() {
+        return "{product: {" +
+                "id: " + id +
+                "; name: " + name +
+                "; volume: " + volume +
+                "} }";
+    }
+
 }

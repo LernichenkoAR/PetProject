@@ -7,5 +7,6 @@ import java.util.List;
 public interface ProductService {
 
     List<ProductDTO> getAll();
-    ProductDTO getById(Long id) throws Throwable;
+
+    ProductDTO getById(Long id);
 }
