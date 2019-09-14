@@ -32,4 +32,9 @@ public class ProductServiceImpl implements ProductService {
         return ProductMapper.from(repository.findById(id)
                 .orElseThrow((Supplier<RuntimeException>) () -> new EntityNotFoundException("Can not find Product")));
     }
+
+    @Override
+    public void save(ProductDTO productDTO) {
+        repository.save(ProductMapper.to(productDTO));
+    }
 }

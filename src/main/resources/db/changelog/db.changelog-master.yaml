@@ -4,21 +4,21 @@ databaseChangeLog:
       id: 1565204120
       author: ler
       changes:
-        - sql: CREATE SCHEMA warehouse;
+        - sql: CREATE SCHEMA WH_SCH;
       rollback:
-        - sql: DROP SCHEMA warehouse;
+        - sql: DROP SCHEMA WH_SCH;
 
   - changeSet:
       id: 1565204293
       author: ler
       changes:
         - createTable:
-            schemaName: warehouse
+            schemaName: WH_SCH
             tableName: warehouse
             columns:
               - column:
                   name: id
-                  type: int
+                  type: long
                   autoIncrement: true
               - column:
                   name: name
@@ -27,7 +27,46 @@ databaseChangeLog:
         - dropTable:
             tableName: warehouse
 
+  - changeSet:
+      id: 1568405324
+      author: ler
+      changes:
+        - createTable:
+            schemaName: WH_SCH
+            tableName: item
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+              - column:
+                  name: warehouse_id
+                  type: long
+              - column:
+                  name: product_id
+                  type: long
+      rollback:
+        - dropTable:
+            tableName: item
 
-
-
-
+  - changeSet:
+      id: 1568405517
+      author: ler
+      changes:
+        - createTable:
+            schemaName: WH_SCH
+            tableName: product
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+              - column:
+                  name: name
+                  type: varchar(50)
+              - column:
+                  name: volume
+                  type: int
+      rollback:
+        - dropTable:
+            tableName: product

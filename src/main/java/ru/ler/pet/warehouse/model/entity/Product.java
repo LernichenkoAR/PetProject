@@ -9,19 +9,19 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "products")
+@Table(name = "product", schema = "WH_SCH")
+//@Table(name = "product")
 
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
+//    @Column(name = "product_id")
     private Long id;
     @Column
     private String name;
     @Column
     private Integer volume;
-//    @ManyToMany(mappedBy = "products")
-//    private List<Warehouse> warehouses;
+
 
     private Product(Long id, String name, Integer volume) {
         this.id = id;

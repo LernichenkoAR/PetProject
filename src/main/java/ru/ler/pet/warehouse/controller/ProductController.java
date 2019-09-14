@@ -1,10 +1,7 @@
 package ru.ler.pet.warehouse.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.ler.pet.warehouse.model.domen.ProductDTO;
 import ru.ler.pet.warehouse.service.ProductService;
 
@@ -25,6 +22,11 @@ public class ProductController {
     @GetMapping("/products/{product_id}")
     public ProductDTO getById(@PathVariable("product_id") Long id) throws Throwable {
         return service.getById(id);
+    }
+
+    @PostMapping("/products/")
+    public void createNew(@RequestBody ProductDTO product) {
+        service.save(product);
     }
 
 }

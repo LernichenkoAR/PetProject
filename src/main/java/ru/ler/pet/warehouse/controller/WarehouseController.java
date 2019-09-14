@@ -32,9 +32,14 @@ class WarehouseController {
         service.createNew(wh);
     }
 
-    @GetMapping("/warehouses/{warehouse_id}/items")
+    @GetMapping("/warehouses/{warehouse_id}/products")
     public List<ProductDTO> getAllProductOfWarehouse(@PathVariable("warehouse_id") Long warehouse_id) {
         return service.getAllProductsOfWarehouse(warehouse_id);
+    }
+
+    @GetMapping("/warehouses/{warehouse_id}/items")
+    public List<ItemDTO> getAllItems(@PathVariable("warehouse_id") Long warehouse_id) {
+        return service.getAllItemsOfWarehouse(warehouse_id);
     }
 
     @PostMapping("/warehouses/{warehouse_id}/items")

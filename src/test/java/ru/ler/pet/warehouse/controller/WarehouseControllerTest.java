@@ -125,21 +125,7 @@ class WarehouseControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    //    @Test
-//    void getWarehouseByIdBadRequest() throws Throwable {
-//        Mockito.when(warehouseServiceImpl.getByID(Mockito.anyLong())).then(invocationOnMock -> {
-//            Long lo = invocationOnMock.getArgument(0);
-//            if (lo > -1 && lo < l.size() ){
-//                return l.get(lo.intValue());
-//            }
-//            if (lo >= l.size()) {
-//                return new EntityNotFoundException();
-//            }
-//            return new BadRequestException();
-//        });
-//        this.mockMvc.perform(get("/api/v1/warehouses/-1"))
-//                .andExpect(status().isBadRequest());
-//    }
+
     @Test
     void createNew() throws Exception {
         ObjectMapper om = new ObjectMapper();

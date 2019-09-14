@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,27 +14,28 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "warehouse")
+@Table(name = "warehouse", schema = "WH_SCH")
+//@Table(name = "warehouse")
 public class Warehouse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "warehouse_id")
+//    @Column(name = "id")
     private Long id;
     @SuppressWarnings("CanBeFinal")
     @Column
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<Item> items;
+    @OneToMany(fetch = FetchType.EAGER,
+//            cascade = CascadeType.ALL,
+            mappedBy = "warehouse")
+    private List<Item> items = new ArrayList<>();
 
 
     private Warehouse(String name) {
         this.name = name;
     }
 
-    public Warehouse(Long id, String name) {
+    private Warehouse(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -54,9 +57,12 @@ public class Warehouse {
     }
 
     public Set<Product> getUniqProducts() {
-        return items.stream()
-                .map(Item::getProduct)
-                .collect(Collectors.toSet());
+        if (items != null && items.size() != 0) {
+            return items.stream()
+                    .map(Item::getProduct)
+                    .collect(Collectors.toSet());
+        }
+        return new HashSet<>();
 
     }
 }

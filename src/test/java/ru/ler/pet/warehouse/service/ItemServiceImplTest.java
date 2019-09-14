@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import ru.ler.pet.warehouse.model.domen.ItemDTO;
+import ru.ler.pet.warehouse.model.domen.ItemMapper;
 import ru.ler.pet.warehouse.model.entity.Item;
 import ru.ler.pet.warehouse.model.entity.Product;
 import ru.ler.pet.warehouse.model.entity.Warehouse;
@@ -58,7 +59,7 @@ class ItemServiceImplTest {
             throwable.printStackTrace();
         }
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(result, resQuery.get(1));
+        Assertions.assertEquals(result, ItemMapper.from(resQuery.get(1)));
     }
 
     @Test
