@@ -1,4 +1,4 @@
-package ru.ler.pet.warehouse.service;
+package ru.ler.pet.warehouse.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import ru.ler.pet.warehouse.model.entity.Product;
@@ -11,4 +11,6 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     List<Product> findAll();
 
     Optional<Product> findById(Long id);
+
+//    Product save(Product product);
 }

@@ -9,7 +9,7 @@ services:
         POSTGRES_USER: wh_user
         POSTGRES_DB: warehouse_db
         POSTGRES_PASSWORD: 54321
-      container_name: warehouse_db
+#      container_name: warehouse_db
 
   wh:
     build: .
@@ -17,4 +17,4 @@ services:
       - "8080:8080"
     depends_on:
       - "postgres"
-    container_name: warehouse_service
+#    container_name: warehouse_service

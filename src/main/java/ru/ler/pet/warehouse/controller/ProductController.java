@@ -3,6 +3,7 @@ package ru.ler.pet.warehouse.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.ler.pet.warehouse.model.domen.ProductDTO;
+import ru.ler.pet.warehouse.model.request.ProductCreateRequest;
 import ru.ler.pet.warehouse.service.ProductService;
 
 import java.util.List;
@@ -20,12 +21,12 @@ public class ProductController {
     }
 
     @GetMapping("/products/{product_id}")
-    public ProductDTO getById(@PathVariable("product_id") Long id) throws Throwable {
-        return service.getById(id);
+    public ProductDTO getById(@PathVariable("product_id") Long id) {
+        return service.findById(id);
     }
 
     @PostMapping("/products/")
-    public void createNew(@RequestBody ProductDTO product) {
+    public void createNew(@RequestBody ProductCreateRequest product) {
         service.save(product);
     }
 

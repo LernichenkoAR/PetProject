@@ -3,19 +3,20 @@ package ru.ler.pet.warehouse.service;
 import ru.ler.pet.warehouse.model.domen.ItemDTO;
 import ru.ler.pet.warehouse.model.domen.ProductDTO;
 import ru.ler.pet.warehouse.model.domen.WarehouseDTO;
+import ru.ler.pet.warehouse.model.request.WarehouseCreateRequest;
 
 import java.util.List;
 
 interface WarehouseService {
-    List<WarehouseDTO> getAll();
+    List<WarehouseDTO> findAll();
 
-    WarehouseDTO getByID(Long id) throws Throwable;
+    WarehouseDTO findById(Long id) throws Throwable;
 
-    List<ProductDTO> getAllProductsOfWarehouse(Long warehouseID) throws Throwable;
+    List<ProductDTO> findAllProductsOfWarehouse(Long warehouseID) throws Throwable;
 
-    List<ItemDTO> getAllItemsOfWarehouse(Long warehouseID) throws Throwable;
+    List<ItemDTO> findAllItemsOfWarehouse(Long warehouseID) throws Throwable;
 
-    void createNew(WarehouseDTO warehouse);
+    WarehouseDTO save(WarehouseCreateRequest dto);
 
-    void saveAllItems(List<ItemDTO> items, Long warehouse_id);
+    List<ItemDTO> loadProduct(Long warehouse_id, Long product_id, Integer quantity);
 }

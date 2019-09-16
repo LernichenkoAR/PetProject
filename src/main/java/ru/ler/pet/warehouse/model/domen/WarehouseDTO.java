@@ -14,9 +14,7 @@ public class WarehouseDTO {
     private Long id;
     private String name;
 
-
-    public static WarehouseDTO ofName(String name) {
-        return new WarehouseDTO(0L, name);
-
+    public static WarehouseDTO newInstance(Long l, String name) {
+        return new WarehouseDTO(l, name);
     }
 }

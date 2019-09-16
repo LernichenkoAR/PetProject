@@ -40,10 +40,6 @@ public class Warehouse {
         this.name = name;
     }
 
-    public static Warehouse ofName(String name) {
-        return new Warehouse(name);
-    }
-
     public static Warehouse newInstance(Long id, String name) {
         return new Warehouse(id, name);
     }

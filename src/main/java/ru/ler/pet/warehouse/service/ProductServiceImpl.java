@@ -6,6 +6,8 @@ import ru.ler.pet.warehouse.exception.BadRequestException;
 import ru.ler.pet.warehouse.exception.EntityNotFoundException;
 import ru.ler.pet.warehouse.model.domen.ProductDTO;
 import ru.ler.pet.warehouse.model.domen.ProductMapper;
+import ru.ler.pet.warehouse.model.request.ProductCreateRequest;
+import ru.ler.pet.warehouse.repository.ProductRepository;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -25,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO getById(Long id) {
+    public ProductDTO findById(Long id) {
         if (id < 0) {
             throw new BadRequestException();
         }
@@ -34,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void save(ProductDTO productDTO) {
-        repository.save(ProductMapper.to(productDTO));
+    public ProductDTO save(ProductCreateRequest product) {
+        return ProductMapper.from(repository.save(ProductMapper.to(product)));
     }
 }

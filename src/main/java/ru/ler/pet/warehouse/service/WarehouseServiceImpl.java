@@ -9,7 +9,10 @@ import ru.ler.pet.warehouse.model.domen.*;
 import ru.ler.pet.warehouse.model.entity.Item;
 import ru.ler.pet.warehouse.model.entity.Product;
 import ru.ler.pet.warehouse.model.entity.Warehouse;
+import ru.ler.pet.warehouse.model.request.WarehouseCreateRequest;
+import ru.ler.pet.warehouse.repository.WarehouseRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -22,14 +25,14 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final ItemService itemService;
     private final ProductService productService;
 
-    public List<WarehouseDTO> getAll() {
+    public List<WarehouseDTO> findAll() {
         return repository.findAll()
                 .stream()
                 .map(WarehouseMapper::from)
                 .collect(Collectors.toList());
     }
 
-    public WarehouseDTO getByID(Long id) {
+    public WarehouseDTO findById(Long id) {
         if (id >= 0) {
             return WarehouseMapper.from(repository.findById(id)
                     .orElseThrow((Supplier<RuntimeException>) () -> new EntityNotFoundException("Can not find warehouse")));
@@ -40,7 +43,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public List<ProductDTO> getAllProductsOfWarehouse(Long warehouseID) {
+    public List<ProductDTO> findAllProductsOfWarehouse(Long warehouseID) {
         return repository.findById(warehouseID)
                 .orElseThrow((Supplier<RuntimeException>) () -> new EntityNotFoundException("Can not find warehouse"))
                 .getUniqProducts()
@@ -50,7 +53,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public List<ItemDTO> getAllItemsOfWarehouse(Long warehouseID) {
+    public List<ItemDTO> findAllItemsOfWarehouse(Long warehouseID) {
         return repository.findById(warehouseID)
                 .orElseThrow((Supplier<RuntimeException>) () -> new EntityNotFoundException("Can not find warehouse"))
                 .getItems().stream()
@@ -58,21 +61,18 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public void createNew(WarehouseDTO dto) {
-        repository.save(WarehouseMapper.to(dto));
+    public WarehouseDTO save(WarehouseCreateRequest warehouse) {
+        return WarehouseMapper.from(repository.save(WarehouseMapper.to(warehouse)));
     }
 
     @Override
-    public void saveAllItems(List<ItemDTO> items, Long warehouse_id) {
-
-        List<Item> its = items.stream()
-                .map(i -> {
-                    Product p = ProductMapper.to(productService.getById(i.getProduct()));
-                    Warehouse w = WarehouseMapper.to(getByID(warehouse_id));
-                    return Item.newInstance(null, p, w);
-                })
-                .collect(Collectors.toList());
-
-        itemService.saveAll(its);
+    public List<ItemDTO> loadProduct(Long warehouse_id, Long product_id, Integer quantity) {
+        Warehouse warehouse = WarehouseMapper.to(findById(warehouse_id));
+        Product product = ProductMapper.to(productService.findById(product_id));
+        List<Item> items = new ArrayList<>();
+        for (int i = 0; i < quantity; i++) {
+            items.add(Item.newInstance(null, product, warehouse));
+        }
+        return itemService.saveAll(items);
     }
 }

@@ -9,11 +9,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import ru.ler.pet.warehouse.ItemFactory;
+import ru.ler.pet.warehouse.ProductFactory;
+import ru.ler.pet.warehouse.WarehouseFactory;
 import ru.ler.pet.warehouse.model.domen.ItemDTO;
 import ru.ler.pet.warehouse.model.domen.ItemMapper;
 import ru.ler.pet.warehouse.model.entity.Item;
-import ru.ler.pet.warehouse.model.entity.Product;
-import ru.ler.pet.warehouse.model.entity.Warehouse;
+import ru.ler.pet.warehouse.repository.ItemRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,21 +34,21 @@ class ItemServiceImplTest {
     @BeforeAll
     public static void init() {
         resQuery = new ArrayList<>();
-        resQuery.add(Item.newInstance(0L, Product.ofNameAndVolume("Barney Bear", 3),
-                Warehouse.newInstance(0l, "Central")));
-        resQuery.add(Item.newInstance(1L, Product.ofNameAndVolume("Honey", 1),
-                Warehouse.newInstance(1L, "O'Rilly")));
+        resQuery.add(ItemFactory.newItem(ProductFactory.newProduct("Barney Bear", 3),
+                WarehouseFactory.newWarehouse( "Central")));
+        resQuery.add(ItemFactory.newItem( ProductFactory.newProduct("Honey", 1),
+                WarehouseFactory.newWarehouse( "O'Rilly")));
     }
 
     @Test
-    void getAll() {
+    void findAll() {
         Mockito.when(repository.findAll()).thenReturn(resQuery);
-        Assertions.assertNotNull(service.getAll());
-        Assertions.assertEquals(service.getAll().size(), 2);
+        Assertions.assertNotNull(service.findAll());
+        Assertions.assertEquals(service.findAll().size(), 2);
     }
 
     @Test
-    void getById() {
+    void findById() {
         Mockito.when(repository.findById(Mockito.anyLong())).thenAnswer((Answer<Optional<Item>>) invocationOnMock -> {
             Long arg = invocationOnMock.getArgument(0);
             int index = arg.intValue();
@@ -54,7 +56,7 @@ class ItemServiceImplTest {
         });
         ItemDTO result = null;
         try {
-            result = service.getById(1L);
+            result = service.findById(1L);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -63,20 +65,26 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void getByWarehouse() {
+    void findByWarehouse() {
         Mockito.when(repository.findByWarehouse(Mockito.anyLong())).thenAnswer((Answer<List<Item>>) invocationOnMock -> {
-            long id = invocationOnMock.getArgument(0);
-            List<Item> result = new ArrayList<>();
-            resQuery.forEach(r -> {
-                if (r.getWarehouse().getId() == id) {
-                    result.add(r);
-                }
-            });
-            return result;
+            Long id = invocationOnMock.getArgument(0);
+            return resQuery.get(id.intValue()).getWarehouse().getItems();
         });
-        List<ItemDTO> result = service.getByWarehouse(1L);
+        List<ItemDTO> result = service.findByWarehouse(1L);
         Assertions.assertNotNull(result);
         Assertions.assertEquals(result.size(), 1);
+    }
 
+    @Test
+    void saveAllItems(){
+        Mockito.when(repository.saveAll(Mockito.anyIterable())).thenAnswer((Answer<List<Item>>) invocation -> {
+            Iterable iterable = invocation.getArgument(0);
+            List<Item> result = new ArrayList<>();
+            iterable.forEach(i -> result.add((Item) i));
+            return result;
+        });
+        List<ItemDTO> result = service.saveAll(resQuery);
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(result.size(), 2);
     }
 }

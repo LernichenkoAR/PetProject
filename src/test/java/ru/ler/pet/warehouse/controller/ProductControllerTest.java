@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.ler.pet.warehouse.ProductFactory;
 import ru.ler.pet.warehouse.exception.BadRequestException;
 import ru.ler.pet.warehouse.exception.EntityNotFoundException;
 import ru.ler.pet.warehouse.model.domen.ProductDTO;
@@ -41,9 +42,9 @@ class ProductControllerTest {
 
     @BeforeAll
     static void init() {
-        l.add(ProductDTO.ofNameAndVolume("Barney Bear", 3));
-        l.add(ProductDTO.ofNameAndVolume("Honey", 2));
-        l.add(ProductDTO.ofNameAndVolume("Milk", 5));
+        l.add(ProductFactory.newProductDTO("Barney Bear", 3));
+        l.add(ProductFactory.newProductDTO("Honey", 2));
+        l.add(ProductFactory.newProductDTO("Milk", 5));
     }
 
     @Test
@@ -84,7 +85,7 @@ class ProductControllerTest {
 
     @Test
     void getWarehouseByIdSuccess() throws Throwable {
-        Mockito.when(productServiceImpl.getById(Mockito.anyLong())).then(invocationOnMock -> {
+        Mockito.when(productServiceImpl.findById(Mockito.anyLong())).then(invocationOnMock -> {
             Long lo = invocationOnMock.getArgument(0);
             if (lo < 0) {
                 throw new BadRequestException();
@@ -106,7 +107,7 @@ class ProductControllerTest {
 
     @Test
     void getWarehouseByIdNotFound() throws Throwable {
-        Mockito.when(productServiceImpl.getById(Mockito.anyLong())).then(invocationOnMock -> {
+        Mockito.when(productServiceImpl.findById(Mockito.anyLong())).then(invocationOnMock -> {
             Long lo = invocationOnMock.getArgument(0);
             if (lo < 0) {
                 throw new BadRequestException();
@@ -122,7 +123,7 @@ class ProductControllerTest {
 
     @Test
     void getWarehouseByIdBadRequest() throws Throwable {
-        Mockito.when(productServiceImpl.getById(Mockito.anyLong())).then(invocationOnMock -> {
+        Mockito.when(productServiceImpl.findById(Mockito.anyLong())).then(invocationOnMock -> {
             Long lo = invocationOnMock.getArgument(0);
             if (lo < 0) {
                 throw new BadRequestException();

@@ -33,9 +33,6 @@ public class Product {
         return new Product(id, name, volume);
     }
 
-    public static Product ofNameAndVolume(String name, Integer volume) {
-        return new Product(0L, name, volume);
-    }
 
     @Override
     public String toString() {

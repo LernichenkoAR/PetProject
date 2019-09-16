@@ -9,9 +9,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import ru.ler.pet.warehouse.ProductFactory;
 import ru.ler.pet.warehouse.model.domen.ProductDTO;
 import ru.ler.pet.warehouse.model.domen.ProductMapper;
 import ru.ler.pet.warehouse.model.entity.Product;
+import ru.ler.pet.warehouse.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +31,8 @@ class ProductServiceImplTest {
     @BeforeAll
     public static void init() {
         resQuery = new ArrayList<>();
-        resQuery.add(Product.newInstance(0L, "Barney Bears", 3));
-        resQuery.add(Product.newInstance(0L, "Peanut Butter", 1));
+        resQuery.add(ProductFactory.newProduct( "Barney Bears", 3));
+        resQuery.add(ProductFactory.newProduct( "Peanut Butter", 1));
     }
 
     @Test
@@ -49,7 +51,7 @@ class ProductServiceImplTest {
         });
         ProductDTO result = null;
         try {
-            result = service.getById(1L);
+            result = service.findById(1L);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }

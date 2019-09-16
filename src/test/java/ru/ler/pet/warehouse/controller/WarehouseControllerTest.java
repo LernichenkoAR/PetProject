@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.ler.pet.warehouse.ItemFactory;
+import ru.ler.pet.warehouse.WarehouseFactory;
 import ru.ler.pet.warehouse.exception.BadRequestException;
 import ru.ler.pet.warehouse.exception.EntityNotFoundException;
 import ru.ler.pet.warehouse.model.domen.ItemDTO;
@@ -29,7 +31,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SuppressWarnings("unused")
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = WarehouseController.class)
 class WarehouseControllerTest {
@@ -44,11 +45,11 @@ class WarehouseControllerTest {
 
     @BeforeAll
     static void init() {
-        l.add(WarehouseDTO.ofName("O'Niel WH"));
-        l.add(WarehouseDTO.ofName("Central WH"));
-        l.add(WarehouseDTO.ofName("Fruit WH"));
-        l.add(WarehouseDTO.ofName("Drone WH"));
-        l.add(WarehouseDTO.ofName("Goods WH"));
+        l.add(WarehouseFactory.newWarehouseDTO("O'Niel WH"));
+        l.add(WarehouseFactory.newWarehouseDTO("Central WH"));
+        l.add(WarehouseFactory.newWarehouseDTO("Fruit WH"));
+        l.add(WarehouseFactory.newWarehouseDTO("Drone WH"));
+        l.add(WarehouseFactory.newWarehouseDTO("Goods WH"));
     }
 
     @Test
@@ -64,7 +65,7 @@ class WarehouseControllerTest {
 
     @Test
     void getAllWarehousesReturnAll() throws Exception {
-        Mockito.when(warehouseServiceImpl.getAll()).thenReturn(Collections.emptyList());
+        Mockito.when(warehouseServiceImpl.findAll()).thenReturn(Collections.emptyList());
         this.mockMvc.perform(get("/api/v1/warehouses"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("[]")));
@@ -72,7 +73,7 @@ class WarehouseControllerTest {
 
     @Test
     void getAllWarehousesCorrectNum() throws Exception {
-        Mockito.when(warehouseServiceImpl.getAll()).thenReturn(l);
+        Mockito.when(warehouseServiceImpl.findAll()).thenReturn(l);
         this.mockMvc.perform(get("/api/v1/warehouses"))
                 .andExpect(status().isOk())
                 .andDo(mvcResult -> {
@@ -89,7 +90,7 @@ class WarehouseControllerTest {
 
     @Test
     void getWarehouseByIdSuccess() throws Throwable {
-        Mockito.when(warehouseServiceImpl.getByID(Mockito.anyLong())).then(invocationOnMock -> {
+        Mockito.when(warehouseServiceImpl.findById(Mockito.anyLong())).then(invocationOnMock -> {
             Long lo = invocationOnMock.getArgument(0);
             if (lo < 0) {
                 throw new BadRequestException();
@@ -111,7 +112,7 @@ class WarehouseControllerTest {
 
     @Test
     void getWarehouseByIdNotFound() throws Throwable {
-        Mockito.when(warehouseServiceImpl.getByID(Mockito.anyLong())).then(invocationOnMock -> {
+        Mockito.when(warehouseServiceImpl.findById(Mockito.anyLong())).then(invocationOnMock -> {
             Long lo = invocationOnMock.getArgument(0);
             if (lo < 0) {
                 throw new BadRequestException();
@@ -129,7 +130,7 @@ class WarehouseControllerTest {
     @Test
     void createNew() throws Exception {
         ObjectMapper om = new ObjectMapper();
-        WarehouseDTO warehouseDTO = WarehouseDTO.ofName("Central");
+        WarehouseDTO warehouseDTO = WarehouseFactory.newWarehouseDTO("Central");
         String wh = om.writeValueAsString(warehouseDTO);
         this.mockMvc.perform(post("/api/v1/warehouses")
                 .contentType(APPLICATION_JSON_UTF8)
@@ -140,7 +141,7 @@ class WarehouseControllerTest {
     @Test
     void addNewItems() throws Exception {
         ObjectMapper om = new ObjectMapper();
-        ItemDTO itemDTO = ItemDTO.newInstance(0L, 0L, 0L);
+        ItemDTO itemDTO = ItemFactory.newItemDTO( 0L, 0L);
         List<ItemDTO> items = new ArrayList<>();
         items.add(itemDTO);
         items.add(itemDTO);

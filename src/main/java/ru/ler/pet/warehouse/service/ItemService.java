@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface ItemService {
 
-    List<ItemDTO> getAll();
+    List<ItemDTO> findAll();
 
-    ItemDTO getById(Long id) throws Throwable;
+    ItemDTO findById(Long id) throws Throwable;
 
-    List<ItemDTO> getByWarehouse(Long warehouse_id);
+    List<ItemDTO> findByWarehouse(Long warehouse_id);
 
-    void saveAll(List<Item> item);
+    List<ItemDTO> saveAll(List<Item> item);
 
 }

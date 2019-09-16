@@ -1,4 +1,4 @@
-package ru.ler.pet.warehouse.service;
+package ru.ler.pet.warehouse.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import ru.ler.pet.warehouse.model.entity.Item;
@@ -13,4 +13,6 @@ public interface ItemRepository extends CrudRepository<Item, Long> {
     Optional<Item> findById(Long id);
 
     List<Item> findByWarehouse(Long warehouse_id);
+
+    List<Item> saveAll(List<Item> items);
 }
